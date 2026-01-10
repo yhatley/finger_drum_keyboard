@@ -63,18 +63,36 @@
             background-color: #666;
         }
 
-        /* ボタン全体のレイアウトを縦4x横2に変更 */
+        /* ボタン全体のレイアウト */
         .button-grid {
             display: grid;
-            grid-template-columns: repeat(3, 180px); /* 2列 */
-            grid-template-rows: repeat(4, 180px); /* 4行 */
             gap: 10px; /* ボタン間のスペース */
+        }
+
+        /* 3x4レイアウト */
+        .button-grid.layout-3x4 {
+            grid-template-columns: repeat(3, 180px);
+            grid-template-rows: repeat(4, 180px);
+        }
+
+        .button-grid.layout-3x4 .drum-button {
+            width: 180px;
+            height: 180px;
+        }
+
+        /* 4x4レイアウト */
+        .button-grid.layout-4x4 {
+            grid-template-columns: repeat(4, 135px);
+            grid-template-rows: repeat(4, 135px);
+        }
+
+        .button-grid.layout-4x4 .drum-button {
+            width: 135px;
+            height: 135px;
         }
 
         /* 各ボタンのスタイル */
         .drum-button {
-            width: 180px;
-            height: 180px;
             background-color: #444;
             border: none;
             border-radius: 10px;
@@ -99,13 +117,23 @@
 
         /* スマートフォン向けに全体をセンタリング */
         @media (max-width: 600px) {
-            .button-grid {
+            .button-grid.layout-3x4 {
                 grid-template-columns: repeat(3, 125px);
                 grid-template-rows: repeat(4, 125px);
             }
-            .drum-button {
+            .button-grid.layout-3x4 .drum-button {
                 width: 125px;
                 height: 125px;
+            }
+
+            .button-grid.layout-4x4 {
+                grid-template-columns: repeat(4, 90px);
+                grid-template-rows: repeat(4, 90px);
+            }
+            .button-grid.layout-4x4 .drum-button {
+                width: 90px;
+                height: 90px;
+                font-size: 1rem;
             }
         }
         /* キー説明用のスタイルを設定 */
@@ -150,7 +178,188 @@
         }
 
         .config-icon.active {
-            color: #aaa;
+            color: #ffa500;
+        }
+
+        /* Side panel styles */
+        .side-panel {
+            position: fixed;
+            right: -250px;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: rgba(42, 42, 42, 0.98);
+            border-left: 1px solid #555;
+            transition: right 0.3s ease;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .side-panel.active {
+            right: 0;
+        }
+
+        .side-panel h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #555;
+            padding-bottom: 10px;
+        }
+
+        .drum-pad-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            background-color: #3a3a3a;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid transparent;
+        }
+
+        .drum-pad-item:hover {
+            background-color: #4a4a4a;
+        }
+
+        /* Layout selector buttons */
+        .layout-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #555;
+        }
+
+        .layout-btn {
+            flex: 1;
+            padding: 10px;
+            background-color: #3a3a3a;
+            border: 2px solid #555;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .layout-btn:hover {
+            background-color: #4a4a4a;
+        }
+
+        .layout-btn.active {
+            background-color: #ffa500;
+            color: #000;
+            border-color: #ffa500;
+            font-weight: bold;
+        }
+
+        .panel-buttons {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #555;
+        }
+
+        .panel-button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #555;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .panel-button:hover {
+            background-color: #666;
+        }
+
+        .panel-button.primary {
+            background-color: #ffa500;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .panel-button.primary:hover {
+            background-color: #ffb833;
+        }
+
+        /* Edit mode overlay */
+        .edit-mode-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 998;
+            pointer-events: none; /* クリックを透過させる */
+        }
+
+        .edit-mode-overlay.active {
+            display: block;
+        }
+
+        .drum-button {
+            position: relative;
+        }
+
+        .drum-button.edit-mode {
+            cursor: pointer;
+        }
+
+        .drum-button.selected {
+            border: 3px solid #ffa500;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.5);
+        }
+
+        .drum-pad-item.selected {
+            background-color: #ffa500;
+            color: #000;
+            border: 2px solid #ff8c00;
+        }
+
+        .drum-button.empty-slot {
+            background-color: transparent;
+            border: 2px dashed #555;
+            color: #666;
+            font-size: 2rem;
+        }
+
+        .drum-button.empty-slot:hover {
+            border-color: #888;
+            color: #888;
+        }
+
+        /* Mobile responsive for side panel */
+        @media (max-width: 600px) {
+            .side-panel {
+                right: auto;
+                left: 0;
+                bottom: -70vh;
+                top: auto;
+                width: 100%;
+                height: 70vh;
+                border-left: none;
+                border-top: 1px solid #555;
+                transition: bottom 0.3s ease;
+            }
+
+            .side-panel.active {
+                right: auto;
+                bottom: 0;
+            }
         }
         /* 「?」マークのスタイル */
         .help-icon {
@@ -208,10 +417,30 @@
 <body>
     <h1>Finger Drum Keyboard</h1>
 
-    <!-- ボタン配列の入れ替え -->
+    <!-- ボタン配列の編集 -->
     <div class="top-right-controls">
-        <span id="config-mode" class="config-icon">↔</span>
+        <span id="config-mode" class="config-icon">⚙️</span>
         <span class="help-icon">?</span>
+    </div>
+
+    <!-- Edit mode overlay -->
+    <div id="edit-overlay" class="edit-mode-overlay"></div>
+
+    <!-- Side panel for editing -->
+    <div id="side-panel" class="side-panel">
+        <h3>レイアウト</h3>
+        <div class="layout-selector">
+            <button id="layout-3x4" class="layout-btn active">3×4</button>
+            <button id="layout-4x4" class="layout-btn">4×4</button>
+        </div>
+        <h3>ドラムパッド</h3>
+        <div id="drum-pad-list">
+            <!-- Drum pads will be inserted here -->
+        </div>
+        <div class="panel-buttons">
+            <button id="reset-layout" class="panel-button">リセット</button>
+            <button id="done-editing" class="panel-button primary">完了</button>
+        </div>
     </div>
     <!-- 説明書のポップアップ -->
     <div id="help-popup" class="help-popup hidden">
@@ -242,20 +471,9 @@
         <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
     </span>
 
-    <!-- 4x3 のボタンを配置 -->
+    <!-- 4x3 のボタンを配置（動的に生成されます） -->
     <div class="button-grid">
-        <button class="drum-button" data-sound="tom1.mp3">Tom 1</button>
-        <button class="drum-button" data-sound="tom2.mp3">Tom 2</button>
-        <button class="drum-button" data-sound="tom3.mp3">Tom 3</button>
-        <button class="drum-button" data-sound="hihat.mp3">Hi-Hat</button>
-        <button class="drum-button" data-sound="hihat_open.mp3">Hi-Hat Open</button>
-        <button class="drum-button" data-sound="hihat.mp3">Hi-Hat</button>
-        <button class="drum-button" data-sound="snare.mp3">Snare</button>
-        <button class="drum-button" data-sound="snare.mp3">Snare</button>
-        <button class="drum-button" data-sound="ride.mp3">Ride</button>
-        <button class="drum-button" data-sound="kick.mp3">Kick</button>
-        <button class="drum-button" data-sound="kick.mp3">Kick</button>
-        <button class="drum-button" data-sound="crash.mp3">Crash</button>
+        <!-- Buttons will be dynamically generated -->
     </div>
 
     <div class="keyboard-info">
@@ -286,47 +504,396 @@
         const soundFiles = ['kick.mp3', 'snare.mp3', 'hihat.mp3', 'hihat_open.mp3', 'ride.mp3', 'tom1.mp3', 'tom2.mp3', 'tom3.mp3', 'crash.mp3', 'click.mp3'];
         soundFiles.forEach(sound => loadSound(sound));
 
-        // キーと音声ファイルの対応を辞書（オブジェクト）で定義
-        const sounds = {
-            Space: 'kick.mp3',  // スペースキー
-            KeyV: 'kick.mp3',
-            KeyN: 'kick.mp3',
-            KeyJ: 'snare.mp3',
-            KeyF: 'snare.mp3',
-            KeyI: 'hihat.mp3',
-            KeyR: 'hihat.mp3',
-            KeyU: 'hihat_open.mp3',
-            KeyT: 'hihat_open.mp3',
-            KeyO: 'crash.mp3',
-            KeyK: 'ride.mp3',
-            Digit9: 'tom1.mp3',
-            Digit2: 'tom1.mp3',
-            Digit8: 'tom2.mp3',
-            Digit3: 'tom2.mp3',
-            Digit7: 'tom3.mp3',
-            Digit4: 'tom3.mp3',
+        // 利用可能なドラムパッドの定義
+        const availablePads = [
+            { sound: 'kick.mp3', label: 'Kick' },
+            { sound: 'snare.mp3', label: 'Snare' },
+            { sound: 'hihat.mp3', label: 'Hi-Hat' },
+            { sound: 'hihat_open.mp3', label: 'Hi-Hat Open' },
+            { sound: 'tom1.mp3', label: 'Tom 1' },
+            { sound: 'tom2.mp3', label: 'Tom 2' },
+            { sound: 'tom3.mp3', label: 'Tom 3' },
+            { sound: 'ride.mp3', label: 'Ride' },
+            { sound: 'crash.mp3', label: 'Crash' }
+        ];
+
+        // デフォルトレイアウト 3x4
+        const defaultLayout3x4 = [
+            { sound: 'tom1.mp3', label: 'Tom 1' },
+            { sound: 'tom2.mp3', label: 'Tom 2' },
+            { sound: 'tom3.mp3', label: 'Tom 3' },
+            { sound: 'hihat.mp3', label: 'Hi-Hat' },
+            { sound: 'hihat_open.mp3', label: 'Hi-Hat Open' },
+            { sound: 'hihat.mp3', label: 'Hi-Hat' },
+            { sound: 'snare.mp3', label: 'Snare' },
+            { sound: 'snare.mp3', label: 'Snare' },
+            { sound: 'ride.mp3', label: 'Ride' },
+            { sound: 'kick.mp3', label: 'Kick' },
+            { sound: 'kick.mp3', label: 'Kick' },
+            { sound: 'crash.mp3', label: 'Crash' }
+        ];
+
+        // デフォルトレイアウト 4x4 (16個)
+        const defaultLayout4x4 = [
+            { sound: 'crash.mp3', label: 'Crash' },
+            { sound: 'tom2.mp3', label: 'Tom 2' },
+            { sound: 'tom1.mp3', label: 'Tom 1' },
+            { sound: 'crash.mp3', label: 'Crash' },
+
+            { sound: 'hihat.mp3', label: 'Hi-Hat' },
+            { sound: 'tom3.mp3', label: 'Tom 3' },
+            { sound: 'hihat_open.mp3', label: 'Hi-Hat Open' },
+            { sound: 'hihat.mp3', label: 'Hi-Hat' },
+
+            { sound: 'ride.mp3', label: 'Ride' },
+            { sound: 'snare.mp3', label: 'Snare' },
+            { sound: 'snare.mp3', label: 'Snare' },
+            { sound: 'ride.mp3', label: 'Ride' },
+
+            { sound: 'kick.mp3', label: 'Kick' },
+            { sound: 'kick.mp3', label: 'Kick' },
+            { sound: 'kick.mp3', label: 'Kick' },
+            { sound: 'kick.mp3', label: 'Kick' },
+        ];
+
+        // キーボードマッピング
+        const keyboardMapping = {
+            'Digit9': 'tom1.mp3',
+            'Digit2': 'tom1.mp3',
+            'Digit8': 'tom2.mp3',
+            'Digit3': 'tom2.mp3',
+            'Digit7': 'tom3.mp3',
+            'Digit4': 'tom3.mp3',
+            'KeyI': 'hihat.mp3',
+            'KeyR': 'hihat.mp3',
+            'KeyU': 'hihat_open.mp3',
+            'KeyT': 'hihat_open.mp3',
+            'KeyJ': 'snare.mp3',
+            'KeyF': 'snare.mp3',
+            'KeyK': 'ride.mp3',
+            'KeyO': 'crash.mp3',
+            'Space': 'kick.mp3',
+            'KeyN': 'kick.mp3',
+            'KeyV': 'kick.mp3'
         };
 
-        // キーボードイベントをリッスン
-        document.addEventListener('keydown', function(event) {
-            const soundFile = sounds[event.code];
-            playSound(soundFile);
+        // ボタンレイアウトの状態管理
+        let buttonLayout = [];
+        let gridLayout = '3x4'; // '3x4' or '4x4'
+
+        // localStorageからレイアウトを読み込む
+        function loadLayout() {
+            const savedGridLayout = localStorage.getItem('gridLayout');
+            if (savedGridLayout) {
+                gridLayout = savedGridLayout;
+            }
+
+            const saved = localStorage.getItem('drumButtonLayout');
+            const savedGridType = localStorage.getItem('savedGridType'); // 保存時のグリッドタイプ
+
+            if (saved && savedGridType === gridLayout) {
+                // 保存されたレイアウトが現在のグリッドタイプと一致する場合のみ使用
+                try {
+                    buttonLayout = JSON.parse(saved);
+                } catch (e) {
+                    buttonLayout = gridLayout === '3x4' ? [...defaultLayout3x4] : [...defaultLayout4x4];
+                }
+            } else {
+                // グリッドタイプが変わった場合や初回はデフォルトを使用
+                buttonLayout = gridLayout === '3x4' ? [...defaultLayout3x4] : [...defaultLayout4x4];
+            }
+        }
+
+        // localStorageにレイアウトを保存
+        function saveLayout() {
+            localStorage.setItem('drumButtonLayout', JSON.stringify(buttonLayout));
+            localStorage.setItem('gridLayout', gridLayout);
+        }
+
+        // グリッドを再描画
+        function renderGrid() {
+            const grid = document.querySelector('.button-grid');
+            grid.innerHTML = '';
+
+            // グリッドレイアウトクラスを設定
+            grid.className = 'button-grid';
+            grid.classList.add(`layout-${gridLayout}`);
+
+            const maxButtons = gridLayout === '3x4' ? 12 : 16;
+
+            // 既存のボタンを配置
+            buttonLayout.forEach((button, index) => {
+                if (index < maxButtons) {
+                    const btn = document.createElement('button');
+                    btn.className = 'drum-button';
+                    btn.setAttribute('data-sound', button.sound);
+                    btn.setAttribute('data-index', index);
+                    btn.textContent = button.label;
+
+                    grid.appendChild(btn);
+                }
+            });
+
+            // 空のスロットを追加
+            const emptySlots = maxButtons - buttonLayout.length;
+            for (let i = 0; i < emptySlots; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'drum-button empty-slot';
+                btn.textContent = '+';
+                grid.appendChild(btn);
+            }
+
+            attachButtonListeners();
+            updateLayoutButtons();
+        }
+
+        // レイアウトボタンの表示更新
+        function updateLayoutButtons() {
+            document.getElementById('layout-3x4').classList.toggle('active', gridLayout === '3x4');
+            document.getElementById('layout-4x4').classList.toggle('active', gridLayout === '4x4');
+        }
+
+        // ボタンイベントリスナーを追加
+        function attachButtonListeners() {
+            const buttons = document.querySelectorAll('.drum-button:not(.empty-slot)');
+            buttons.forEach(button => {
+                button.addEventListener('click', handleButtonClick);
+                button.addEventListener('touchstart', function(event) {
+                    event.preventDefault();
+                    handleButtonClick.call(this, event);
+                });
+            });
+
+            // 空のスロットのイベント
+            const emptySlots = document.querySelectorAll('.drum-button.empty-slot');
+            emptySlots.forEach(slot => {
+                slot.addEventListener('click', addNewButton);
+                slot.addEventListener('touchstart', function(event) {
+                    event.preventDefault();
+                    addNewButton.call(this, event);
+                });
+            });
+        }
+
+        // 新しいボタンを追加
+        function addNewButton() {
+            const maxButtons = gridLayout === '3x4' ? 12 : 16;
+            if (buttonLayout.length < maxButtons) {
+                buttonLayout.push({ sound: 'kick.mp3', label: 'Kick' });
+                saveLayout();
+                renderGrid();
+            }
+        }
+
+        // ボタンクリック処理
+        let editMode = false;
+        let firstSelection = null; // { type: 'pad' or 'menu', index: number, data: object }
+
+        function handleButtonClick(event) {
+            if (editMode) {
+                const index = parseInt(this.getAttribute('data-index'));
+                selectPad(index);
+            } else {
+                playSound(this.getAttribute('data-sound'));
+            }
+        }
+
+        // パッド選択（1つ目または2つ目）
+        function selectPad(index) {
+            if (firstSelection === null) {
+                // 1つ目の選択
+                firstSelection = {
+                    type: 'pad',
+                    index: index,
+                    data: { ...buttonLayout[index] }
+                };
+                updateSelection();
+            } else if (firstSelection.type === 'pad' && firstSelection.index === index) {
+                // 同じパッドをクリック：選択解除
+                firstSelection = null;
+                updateSelection();
+            } else if (firstSelection.type === 'pad') {
+                // パッド → パッド：入れ替え
+                const temp = buttonLayout[index];
+                buttonLayout[index] = firstSelection.data;
+                buttonLayout[firstSelection.index] = temp;
+                saveLayout();
+                renderGrid();
+                firstSelection = null;
+                updateSelection();
+            } else if (firstSelection.type === 'menu') {
+                // メニュー → パッド：パッドをメニューの楽器にする
+                buttonLayout[index] = { ...firstSelection.data };
+                saveLayout();
+                renderGrid();
+                firstSelection = null;
+                updateSelection();
+            }
+        }
+
+        // ドラムパッドリストを生成
+        function renderDrumPadList() {
+            const list = document.getElementById('drum-pad-list');
+            list.innerHTML = '';
+
+            availablePads.forEach((pad, index) => {
+                const item = document.createElement('div');
+                item.className = 'drum-pad-item';
+                item.setAttribute('data-menu-index', index);
+                item.innerHTML = `<span>🥁</span><span>${pad.label}</span>`;
+                item.onclick = () => selectMenuPad(index, pad);
+                list.appendChild(item);
+            });
+        }
+
+        // メニューのパッド選択
+        function selectMenuPad(index, pad) {
+            if (!editMode) return;
+
+            if (firstSelection === null) {
+                // 1つ目の選択（メニューから）
+                firstSelection = {
+                    type: 'menu',
+                    index: index,
+                    data: { sound: pad.sound, label: pad.label }
+                };
+                updateSelection();
+            } else if (firstSelection.type === 'menu' && firstSelection.index === index) {
+                // 同じメニュー項目をクリック：選択解除
+                firstSelection = null;
+                updateSelection();
+            } else if (firstSelection.type === 'pad') {
+                // パッド → メニュー：パッドをメニューの楽器にする
+                buttonLayout[firstSelection.index] = { sound: pad.sound, label: pad.label };
+                saveLayout();
+                renderGrid();
+                firstSelection = null;
+                updateSelection();
+            } else if (firstSelection.type === 'menu') {
+                // メニュー → メニュー：選択を変更
+                firstSelection = {
+                    type: 'menu',
+                    index: index,
+                    data: { sound: pad.sound, label: pad.label }
+                };
+                updateSelection();
+            }
+        }
+
+        // 選択状態の表示更新
+        function updateSelection() {
+            // パッドの選択状態を更新
+            const buttons = document.querySelectorAll('.drum-button');
+            buttons.forEach((btn, i) => {
+                if (firstSelection && firstSelection.type === 'pad' && firstSelection.index === i) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+
+            // メニューの選択状態を更新
+            const menuItems = document.querySelectorAll('.drum-pad-item');
+            menuItems.forEach((item, i) => {
+                if (firstSelection && firstSelection.type === 'menu' && firstSelection.index === i) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+        }
+
+        // レイアウトをリセット
+        function resetLayout() {
+            if (confirm('レイアウトをデフォルトに戻しますか?')) {
+                buttonLayout = gridLayout === '3x4' ? [...defaultLayout3x4] : [...defaultLayout4x4];
+                saveLayout();
+                renderGrid();
+                firstSelection = null;
+                updateSelection();
+            }
+        }
+
+        // 編集モード切り替え
+        document.getElementById('config-mode').addEventListener('click', function() {
+            editMode = !editMode;
+            this.classList.toggle('active');
+            document.getElementById('side-panel').classList.toggle('active');
+            document.getElementById('edit-overlay').classList.toggle('active');
+
+            const buttons = document.querySelectorAll('.drum-button');
+            buttons.forEach(btn => {
+                if (editMode) {
+                    btn.classList.add('edit-mode');
+                } else {
+                    btn.classList.remove('edit-mode', 'selected');
+                }
+            });
+
+            if (!editMode) {
+                firstSelection = null;
+                updateSelection();
+            }
         });
 
-        // ボタンクリックで音を鳴らす処理
-        const buttons = document.querySelectorAll('.drum-button');
-        buttons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                playSound(this.getAttribute('data-sound'));
-            });
-            button.addEventListener('touchstart', function(event) {
-                event.preventDefault();  // フォーカスを防止
-                playSound(this.getAttribute('data-sound'));
-            });
+        // レイアウト切り替えボタン
+        document.getElementById('layout-3x4').addEventListener('click', function() {
+            if (gridLayout !== '3x4') {
+                gridLayout = '3x4';
+                // 12個を超えるボタンは削除
+                if (buttonLayout.length > 12) {
+                    if (confirm('12個を超えるボタンは削除されます。よろしいですか？')) {
+                        buttonLayout = buttonLayout.slice(0, 12);
+                        saveLayout();
+                        renderGrid();
+                        firstSelection = null;
+                        updateSelection();
+                    } else {
+                        return;
+                    }
+                } else {
+                    saveLayout();
+                    renderGrid();
+                }
+            }
+        });
+
+        document.getElementById('layout-4x4').addEventListener('click', function() {
+            if (gridLayout !== '4x4') {
+                gridLayout = '4x4';
+                // 4x4では16個まで配置可能
+                // 不足分は空のボタンとして追加しない（ユーザーが追加）
+                saveLayout();
+                renderGrid();
+            }
+        });
+
+        // サイドパネルボタン
+        document.getElementById('reset-layout').addEventListener('click', resetLayout);
+        document.getElementById('done-editing').addEventListener('click', function() {
+            document.getElementById('config-mode').click(); // 編集モードを終了
+        });
+
+        // オーバーレイクリックでは何もしない（編集モードは維持）
+        // document.getElementById('edit-overlay').addEventListener('click', function() {
+        //     if (editMode) {
+        //         document.getElementById('config-mode').click();
+        //     }
+        // });
+
+        // キーボードイベント
+        document.addEventListener('keydown', function(event) {
+            if (editMode) return; // 編集モード中は無効
+
+            const soundFile = keyboardMapping[event.code];
+            if (soundFile) {
+                playSound(soundFile);
+            }
         });
 
         // 音声再生の関数を作成
         function playSound(soundFile) {
+            if (!soundFile) return;
             const buffer = soundBuffers[soundFile];
             if (buffer) {
                 const source = audioContext.createBufferSource();
@@ -340,10 +907,9 @@
         // メトロノーム機能
         let metronomeInterval;
 
-        // メトロノームを開始する
         document.getElementById('start-metronome').addEventListener('click', function() {
             const bpm = document.getElementById('bpm').value;
-            const interval = (60 / bpm) * 1000; // BPMに基づいてインターバルを計算
+            const interval = (60 / bpm) * 1000;
 
             if (metronomeInterval) {
                 clearInterval(metronomeInterval);
@@ -354,81 +920,35 @@
             }, interval);
         });
 
-        // メトロノームを停止する
         document.getElementById('stop-metronome').addEventListener('click', function() {
             if (metronomeInterval) {
                 clearInterval(metronomeInterval);
             }
         });
 
-        // 音量を調整する関数
+        // 音量調整
         function setVolume(value) {
-            gainNode.gain.value = value; // 0.0 (無音) 〜 1.0 (最大音量)
+            gainNode.gain.value = value;
         }
-        // ボリュームスライダーのイベントリスナーを追加
+
         const volumeSlider = document.getElementById('volume-slider');
         volumeSlider.addEventListener('input', function() {
             setVolume(this.value);
         });
-        // 「?」マークをクリックしたときの処理
+
+        // ヘルプポップアップ
         document.querySelector('.help-icon').addEventListener('click', function() {
             document.getElementById('help-popup').classList.remove('hidden');
         });
 
-        // 説明ポップアップを閉じる処理
         document.getElementById('close-help').addEventListener('click', function() {
             document.getElementById('help-popup').classList.add('hidden');
         });
 
-        // Add this before the existing script's closing tag
-        let configMode = false;
-        let selectedButton = null;
-
-        // Config mode toggle
-        document.getElementById('config-mode').addEventListener('click', function() {
-            configMode = !configMode;
-            this.textContent = `↔`;
-            this.classList.toggle('active');
-            
-            if (!configMode) {
-                selectedButton = null;
-                buttons.forEach(btn => btn.classList.remove('config-active'));
-            }
-        });
-
-        buttons.forEach(button => {
-            const handleInteraction = function(event) {
-                if (configMode) {
-                    if (selectedButton === null) {
-                        selectedButton = this;
-                        this.classList.add('config-active');
-                    } else {
-                        // Swap the sounds
-                        const tempSound = selectedButton.getAttribute('data-sound');
-                        const tempText = selectedButton.textContent;
-                        
-                        selectedButton.setAttribute('data-sound', this.getAttribute('data-sound'));
-                        selectedButton.textContent = this.textContent;
-                        
-                        this.setAttribute('data-sound', tempSound);
-                        this.textContent = tempText;
-                        
-                        // Reset selection
-                        selectedButton.classList.remove('config-active');
-                        selectedButton = null;
-                    }
-                } else {
-                    playSound(this.getAttribute('data-sound'));
-                }
-            };
-
-            // Add both click and touchstart events
-            button.addEventListener('click', handleInteraction);
-            button.addEventListener('touchstart', function(event) {
-                event.preventDefault();  // Prevent default touch behavior
-                handleInteraction.call(this, event);
-            });
-        });
+        // 初期化
+        loadLayout();
+        renderGrid();
+        renderDrumPadList();
 </script>
 </body>
 </html>
