@@ -91,6 +91,17 @@
             height: 135px;
         }
 
+        /* 4x5レイアウト */
+        .button-grid.layout-4x5 {
+            grid-template-columns: repeat(4, 135px);
+            grid-template-rows: repeat(5, 108px);
+        }
+
+        .button-grid.layout-4x5 .drum-button {
+            width: 135px;
+            height: 108px;
+        }
+
         /* 各ボタンのスタイル */
         .drum-button {
             background-color: #444;
@@ -134,6 +145,16 @@
                 width: 90px;
                 height: 90px;
                 font-size: 1rem;
+            }
+
+            .button-grid.layout-4x5 {
+                grid-template-columns: repeat(4, 90px);
+                grid-template-rows: repeat(5, 72px);
+            }
+            .button-grid.layout-4x5 .drum-button {
+                width: 90px;
+                height: 72px;
+                font-size: 0.9rem;
             }
         }
         /* キー説明用のスタイルを設定 */
@@ -432,6 +453,7 @@
         <div class="layout-selector">
             <button id="layout-3x4" class="layout-btn active">3×4</button>
             <button id="layout-4x4" class="layout-btn">4×4</button>
+            <button id="layout-4x5" class="layout-btn">4×5</button>
         </div>
         <h3>ドラムパッド</h3>
         <div id="drum-pad-list">
@@ -556,6 +578,34 @@
             { sound: 'kick.mp3', label: 'Kick' },
         ];
 
+        // デフォルトレイアウト 4x5 (20個)
+        const defaultLayout4x5 = [
+            { sound: 'tom3.mp3', label: 'Tom 3' },
+            { sound: 'tom2.mp3', label: 'Tom 2' },
+            { sound: 'tom1.mp3', label: 'Tom 1' },
+            { sound: 'tom3.mp3', label: 'Tom 3' },
+
+            { sound: 'crash.mp3', label: 'Crash' },
+            { sound: 'ride.mp3', label: 'Ride' },
+            { sound: 'ride.mp3', label: 'Ride' },
+            { sound: 'crash.mp3', label: 'Crash' },
+
+            { sound: 'hihat.mp3', label: 'Hi-Hat' },
+            { sound: 'hihat_open.mp3', label: 'Hi-Hat Open' },
+            { sound: 'hihat_open.mp3', label: 'Hi-Hat Open' },
+            { sound: 'hihat.mp3', label: 'Hi-Hat' },
+
+            { sound: 'ride.mp3', label: 'Ride' },
+            { sound: 'snare.mp3', label: 'Snare' },
+            { sound: 'snare.mp3', label: 'Snare' },
+            { sound: 'ride.mp3', label: 'Ride' },
+
+            { sound: 'kick.mp3', label: 'Kick' },
+            { sound: 'kick.mp3', label: 'Kick' },
+            { sound: 'kick.mp3', label: 'Kick' },
+            { sound: 'kick.mp3', label: 'Kick' },
+        ];
+
         // キーボードマッピング
         const keyboardMapping = {
             'Digit9': 'tom1.mp3',
@@ -596,12 +646,20 @@
                 try {
                     buttonLayout = JSON.parse(saved);
                 } catch (e) {
-                    buttonLayout = gridLayout === '3x4' ? [...defaultLayout3x4] : [...defaultLayout4x4];
+                    buttonLayout = getDefaultLayout(gridLayout);
                 }
             } else {
                 // グリッドタイプが変わった場合や初回はデフォルトを使用
-                buttonLayout = gridLayout === '3x4' ? [...defaultLayout3x4] : [...defaultLayout4x4];
+                buttonLayout = getDefaultLayout(gridLayout);
             }
+        }
+
+        // グリッドタイプに応じたデフォルトレイアウトを取得
+        function getDefaultLayout(layout) {
+            if (layout === '3x4') return [...defaultLayout3x4];
+            if (layout === '4x4') return [...defaultLayout4x4];
+            if (layout === '4x5') return [...defaultLayout4x5];
+            return [...defaultLayout3x4];
         }
 
         // localStorageにレイアウトを保存
@@ -619,7 +677,7 @@
             grid.className = 'button-grid';
             grid.classList.add(`layout-${gridLayout}`);
 
-            const maxButtons = gridLayout === '3x4' ? 12 : 16;
+            const maxButtons = gridLayout === '3x4' ? 12 : (gridLayout === '4x4' ? 16 : 20);
 
             // 既存のボタンを配置
             buttonLayout.forEach((button, index) => {
@@ -651,6 +709,7 @@
         function updateLayoutButtons() {
             document.getElementById('layout-3x4').classList.toggle('active', gridLayout === '3x4');
             document.getElementById('layout-4x4').classList.toggle('active', gridLayout === '4x4');
+            document.getElementById('layout-4x5').classList.toggle('active', gridLayout === '4x5');
         }
 
         // ボタンイベントリスナーを追加
@@ -677,7 +736,7 @@
 
         // 新しいボタンを追加
         function addNewButton() {
-            const maxButtons = gridLayout === '3x4' ? 12 : 16;
+            const maxButtons = gridLayout === '3x4' ? 12 : (gridLayout === '4x4' ? 16 : 20);
             if (buttonLayout.length < maxButtons) {
                 buttonLayout.push({ sound: 'kick.mp3', label: 'Kick' });
                 saveLayout();
@@ -806,7 +865,7 @@
         // レイアウトをリセット
         function resetLayout() {
             if (confirm('レイアウトをデフォルトに戻しますか?')) {
-                buttonLayout = gridLayout === '3x4' ? [...defaultLayout3x4] : [...defaultLayout4x4];
+                buttonLayout = getDefaultLayout(gridLayout);
                 saveLayout();
                 renderGrid();
                 firstSelection = null;
@@ -863,6 +922,15 @@
                 gridLayout = '4x4';
                 // 4x4では16個まで配置可能
                 // 不足分は空のボタンとして追加しない（ユーザーが追加）
+                saveLayout();
+                renderGrid();
+            }
+        });
+
+        document.getElementById('layout-4x5').addEventListener('click', function() {
+            if (gridLayout !== '4x5') {
+                gridLayout = '4x5';
+                // 4x5では20個まで配置可能
                 saveLayout();
                 renderGrid();
             }
